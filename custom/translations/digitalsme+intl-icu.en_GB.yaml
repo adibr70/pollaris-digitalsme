@@ -1,0 +1,15 @@
+# DIGITAL SME's own strings, in the "digitalsme" translation domain.
+#
+# A separate domain on purpose: a file named like the upstream one
+# (messages+intl-icu.en_GB.yaml) would have replaced it wholesale and we would
+# have lost every other key. Here we add only what we override.
+#
+# For other languages, copy this file and change the locale code, for example
+# digitalsme+intl-icu.fr_FR.yaml. Where a key is missing, Symfony falls back
+# to English.
+
+home.title: 'Organise meetings and gather opinions across the network, simply and freely.'
+home.intro: 'Use our polling tool to agree on a date or collect feedback quickly and easily. Participants vote through a link, with no account.'
+
+# Shown to unauthenticated visitors on the home page.
+home.staff_only: 'Creating polls is reserved for DIGITAL SME staff. Voting is open to everyone, no account needed.'

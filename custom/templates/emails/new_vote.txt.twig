@@ -1,0 +1,19 @@
+{#
+ # Local override of a Pollaris 1.2.3 template.
+ # Original: templates/emails/new_vote.txt.twig
+ # Copyright 2024-2026 Marien Fressinaud
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #
+ # Change: adds the instance signature at the end of the e-mail.
+ # "Best regards" has no translation key of its own upstream, so the text
+ # stays in English whatever the recipient's language. appName is a global
+ # Twig variable, bound to APP_NAME in .env.
+ #}
+{{ 'emails.hello' | trans({ name: admin_name }) }}
+
+{{ 'emails.new_vote.voted' | trans({ voter_name: voter_name, poll_name: poll_name }) }}
+
+{{ 'emails.link_to_poll' | trans({ url: url('poll', { slug: poll_slug }) }) }}
+
+Best regards,
+{{ appName }} Team

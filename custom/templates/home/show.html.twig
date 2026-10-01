@@ -1,0 +1,89 @@
+{#
+ # Local override of a Pollaris 1.2.3 template.
+ # Original: templates/home/show.html.twig
+ # Copyright 2024-2026 Marien Fressinaud
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #
+ # Change: the title and introduction now come from our own "digitalsme"
+ # translation domain rather than the default one. The original text spoke of
+ # "friends and family", which does not fit an association of SMEs.
+ #
+ # A separate domain, rather than overriding the upstream translation files:
+ # a file with the same name would have replaced them wholesale, losing every
+ # other key. This way we only add what we need.
+ #
+ # Change: the create button is shown only to authenticated users. Voting
+ # stays public, with no account.
+ #
+ # Change: the source code link points at the modified source actually
+ # running, not at the original. AGPL-3.0 section 13 requires that users
+ # interacting over a network can obtain the source of the running version.
+ # Public repository: https://github.com/adibr70/pollaris-digitalsme
+ #}
+
+{% extends 'base.html.twig' %}
+
+{% block robots_head_tags %}{% endblock %}
+
+{% block body %}
+    <div class="wrapper flow flow--larger">
+        {% for message in app.flashes('success') %}
+            {% if message == 'poll.deleted' %}
+                {{ include('notifications/_success.html.twig', { message: 'home.show.poll.deleted' | trans }) }}
+            {% endif %}
+        {% endfor %}
+
+        <div class="cols cols--gap-large">
+            <div class="col--extend flow flow--large">
+                <h1>
+                    {{ 'home.title' | trans({}, 'digitalsme') }}
+                </h1>
+
+                <p class="text--primary text--big">
+                    {{ 'home.intro' | trans({}, 'digitalsme') }}
+                </p>
+            </div>
+
+            <div>
+                <img alt="" src="{{ asset('calendar.png') }}">
+            </div>
+        </div>
+
+        {# Creating polls is reserved for staff (see
+         # config/packages/security.yaml). Without this, visitors would press
+         # the button and land on a login screen with no explanation. #}
+        <p class="cols cols--center cols--gap">
+            {% if is_granted('ROLE_USER') %}
+                <a class="button button--primary" href="{{ path('choose poll type') }}">
+                    {{ 'home.create_poll' | trans }}
+                </a>
+            {% else %}
+                <a class="button button--primary" href="{{ path('login') }}">
+                    {{ 'login.log_in' | trans }}
+                </a>
+            {% endif %}
+
+            <a class="button" href="{{ path('my') }}">
+                {{ 'home.my_polls_and_votes' | trans }}
+            </a>
+        </p>
+
+        {% if not is_granted('ROLE_USER') %}
+            <p class="text--secondary">
+                {{ 'home.staff_only' | trans({}, 'digitalsme') }}
+            </p>
+        {% endif %}
+
+        <p class="text--secondary">
+            {% if appName == 'Pollaris' %}
+                {{ 'home.free_software' | trans }}
+            {% else %}
+                {{ 'home.free_software.custom' | trans({ appName: appName }) }}
+            {% endif %}
+
+            <a href="https://github.com/adibr70/pollaris-digitalsme">
+                {{ 'home.source_code' | trans }}
+            </a>
+        </p>
+    </div>
+{% endblock %}

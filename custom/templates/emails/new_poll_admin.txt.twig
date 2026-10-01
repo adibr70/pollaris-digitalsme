@@ -1,0 +1,35 @@
+{#
+ # Local override of a Pollaris 1.2.3 template.
+ # Original: templates/emails/new_poll_admin.txt.twig
+ # Copyright 2024-2026 Marien Fressinaud
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #
+ # Change: the e-mail only carried the admin link, unlabelled. Adds the public
+ # link and labels both links explicitly.
+ #
+ # The labels reuse 'admin.polls.admin_link' and 'admin.polls.public_link',
+ # which already exist for the administration interface and are translated in
+ # every shipped locale except Dutch, where Symfony falls back to English as
+ # it does elsewhere in the application. No untranslated string is introduced.
+ #
+ # The order matters: 'new_poll_admin.created' ends with "following link", so
+ # the admin link stays under it, and the 'keep_it_secret' warning stays
+ # directly under that link, leaving no doubt which link it refers to.
+ #
+ # Change: adds the instance signature at the end. "Best regards" has no
+ # translation key of its own upstream, so it stays in English whatever the
+ # recipient's language. appName is a global Twig variable bound to APP_NAME.
+ #}
+
+{{ 'emails.hello' | trans({ name: poll.authorName }) }}
+
+{{ 'emails.new_poll_admin.created' | trans({ poll_name: poll.title }) }}
+
+{{ 'admin.polls.admin_link' | trans }}: {{ url('poll admin', { id: poll.id, token: poll.adminToken }) }}
+
+{{ 'emails.new_poll_admin.keep_it_secret' | trans }}
+
+{{ 'admin.polls.public_link' | trans }}: {{ url('poll', { slug: poll.slug|default(poll.id) }) }}
+
+Best regards,
+{{ appName }} Team

@@ -1,0 +1,84 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        common: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+
+    firewalls:
+        dev:
+            # Ensure dev tools and static assets are always allowed
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+
+            # Activate different ways to authenticate:
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: home
+                enable_csrf: true
+
+            logout:
+                path: logout
+
+    # Note: Only the *first* matching rule is applied
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
+        # LOCAL CHANGE (DIGITAL SME)
+        #
+        # By default anyone can create a poll: Pollaris is designed as a public
+        # tool. We want only staff to create, but everyone to be able to vote.
+        #
+        # Anchoring with $ is mandatory. Without it, ^/polls/new would also
+        # match /polls/newsletter-2026, blocking votes on any poll whose slug
+        # starts with "new". access_control matches regular expressions against
+        # the path, not routes, so it knows nothing about {slug}.
+        - { path: '^/polls/choose/?$', roles: ROLE_USER }
+        - { path: '^/polls/new/?$', roles: ROLE_USER }
+
+        # Managing a poll: the secret token AND an account. The token alone
+        # was enough by default, so a link that left the organisation by
+        # mistake granted anyone the right to edit and delete.
+        #
+        # Mind the number of segments. The pattern below requires exactly
+        # /polls/{id}/{token}/{action}, anchored at the end. Unanchored it
+        # would also match /polls/{slug}/votes/{id}/edit, through which a
+        # participant corrects their own vote, and which MUST stay public.
+        - { path: '^/polls/[^/]+/[^/]+/(admin|edit|settings|proposals|dates|slots|summary|complete|deletion)/?$', roles: ROLE_USER }
+
+        # Deletion of a vote by the poll's administrator.
+        - { path: '^/polls/[^/]+/[^/]+/votes/[^/]+/deletion/?$', roles: ROLE_USER }
+
+        # Everything else stays public: voting on /polls/{slug}, correcting
+        # one's own vote, /polls/{slug}/authenticate for password-protected
+        # polls, the CSV export, /my and the home page.
+
+when@test:
+    security:
+        password_hashers:
+            # Password hashers are resource-intensive by design to ensure security.
+            # In tests, it's safe to reduce their cost to improve performance.
+            common:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon
+
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4
+                time_cost: 3
+                memory_cost: 10

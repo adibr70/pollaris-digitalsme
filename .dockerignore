@@ -1,0 +1,20 @@
+# The pristine baselines only serve the comparison done at upgrade time
+# (scripts/check-overrides.sh). They have no business in the image.
+custom/.upstream
+
+# Secrets and local state: must never reach the build context.
+.env
+*.env
+!.env.example
+
+# Not used by the build
+.git
+.gitignore
+README.md
+scripts
+backups
+
+# CAREFUL: do not exclude the whole nginx folder. The "web" stage of the
+# Dockerfile copies nginx/pollaris.conf, so excluding it breaks the build.
+# Only the host vhost has no business in the image.
+nginx/host-*.conf

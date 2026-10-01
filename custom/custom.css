@@ -1,0 +1,93 @@
+/* ============================================================
+   DIGITAL SME branding for Pollaris
+   Official customisation point: public/custom.css
+   Loaded after the application's CSS, so it overrides without a fork.
+
+   The colours are taken from the official logo:
+     #023e84  DIGITAL SME blue (wordmark text)
+     #575656  grey, "European" / "Alliance"
+     #fecc00  gold, the European stars
+
+   The scale below is generated from the blue with:
+     python3 scripts/generate-theme.py "#023e84"
+   ============================================================ */
+
+:root {
+    --color-iris1: #fcfdfe;
+    --color-iris2: #f5f9fd;
+    --color-iris3: #e8f1fc;
+    --color-iris4: #d8e8fb;
+    --color-iris5: #c6defb;
+    --color-iris6: #b1d2fa;
+    --color-iris7: #94c2f8;
+    --color-iris8: #68a8f3;
+    --color-iris9: #023e84;
+    --color-iris10: #023168;
+    --color-iris11: #1f61ad;
+    --color-iris12: #173457;
+
+    --color-iris-dark1: #0c151f;
+    --color-iris-dark2: #0d1b2b;
+    --color-iris-dark3: #0c294b;
+    --color-iris-dark4: #0a3567;
+    --color-iris-dark5: #0c417f;
+    --color-iris-dark6: #114d93;
+    --color-iris-dark7: #185eb0;
+    --color-iris-dark8: #2271ce;
+    --color-iris-dark9: #036ae2;
+    --color-iris-dark10: #0677fb;
+    --color-iris-dark11: #8fbef4;
+    --color-iris-dark12: #d6e6f7;
+}
+
+/* ---------- Header on a white background ----------
+   By default the header is filled with the primary colour, but the DIGITAL
+   SME logo has dark blue text and would be invisible on it. The header moves
+   to white, with the logo in its original colours, the gold stars included.
+
+   The header's elements (title, link, button) all use 'currentcolor', so they
+   inherit the colour set here automatically. */
+.header {
+    color: var(--color-iris9);
+    background-color: #fff;
+    border-bottom: 1px solid var(--color-iris5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* The focus outline was calibrated for a dark header: on white it vanishes. */
+.header__button {
+    --outline-color: currentcolor;
+}
+
+/* ---------- Logo ----------
+   The text stays in the page for screen readers. */
+.header__title {
+    display: inline-block;
+    width: 91px;
+    height: 44px;
+    background-image: url("/custom/logo.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+    text-indent: -9999px;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: middle;
+    /* The logo was touching the next link. */
+    margin-right: var(--space-medium);
+}
+
+/* ---------- A look closer to Doodle ---------- */
+:root {
+    --border-radius-small: 8px;
+    --cell-sticky-width: 180px;
+    --poll-max-width: 1340px;
+}
+
+.button--primary {
+    font-weight: 600;
+}
+
+/* ---------- The footer attribution ----------
+   Pollaris is AGPL-3.0. The licence requires keeping the copyright notices
+   and offering the source code to users. Do not hide the source link. */
