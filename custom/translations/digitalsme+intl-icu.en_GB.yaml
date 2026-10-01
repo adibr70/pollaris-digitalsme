@@ -8,8 +8,8 @@
 # digitalsme+intl-icu.fr_FR.yaml. Where a key is missing, Symfony falls back
 # to English.
 
-home.title: 'Organise meetings and gather opinions across the network, simply and freely.'
-home.intro: 'Use our polling tool to agree on a date or collect feedback quickly and easily. Participants vote through a link, with no account.'
+home.title: 'Organise meetings and gather opinions across the network.'
+home.intro: 'Use this tool to agree on a date or collect feedback quickly and easily. Participants vote through a link, with no account.'
 
 # Shown to unauthenticated visitors on the home page.
-home.staff_only: 'Creating polls is reserved for DIGITAL SME staff. Voting is open to everyone, no account needed.'
+home.staff_only: 'Creating polls is reserved for the European DIGITAL SME Alliance team. Voting is open to everyone, no account needed.'
