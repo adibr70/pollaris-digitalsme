@@ -13,3 +13,8 @@ home.intro: 'Use this tool to agree on a date or collect feedback quickly and ea
 
 # Shown to unauthenticated visitors on the home page.
 home.staff_only: 'Creating polls is reserved for the European DIGITAL SME Alliance team. Voting is open to everyone, no account needed.'
+
+# The "My polls" page, a local addition: upstream only mails the list.
+my_polls.title: 'My polls'
+my_polls.matched_on: 'Polls you created with the address {email}.'
+my_polls.none: 'You have not created any poll yet.'

@@ -61,6 +61,10 @@ COPY custom/templates/ /app/templates/
 COPY custom/translations/ /app/translations/
 # Overridden configuration: who is allowed to create polls.
 COPY custom/config/ /app/config/
+# Our own PHP: the "My polls" page and the author e-mail pre-fill. These are
+# additions, not overrides, so upstream's own classes keep being used as
+# shipped. config/services.yaml already autowires everything under src/.
+COPY custom/src/ /app/src/
 
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 RUN composer dump-autoload --optimize --classmap-authoritative \

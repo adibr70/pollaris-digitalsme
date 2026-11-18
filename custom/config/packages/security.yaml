@@ -59,6 +59,10 @@ security:
         # participant corrects their own vote, and which MUST stay public.
         - { path: '^/polls/[^/]+/[^/]+/(admin|edit|settings|proposals|dates|slots|summary|complete|deletion)/?$', roles: ROLE_USER }
 
+        # "My polls", a local addition: the list of polls you created.
+        # Anchored like the rest; /my itself stays public.
+        - { path: '^/my/polls/?$', roles: ROLE_USER }
+
         # Deletion of a vote by the poll's administrator.
         - { path: '^/polls/[^/]+/[^/]+/votes/[^/]+/deletion/?$', roles: ROLE_USER }
 

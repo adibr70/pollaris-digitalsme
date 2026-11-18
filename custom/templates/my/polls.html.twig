@@ -1,0 +1,89 @@
+{#
+ # Local addition for polls.digitalsme.eu, not part of upstream Pollaris.
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #
+ # Lists the signed-in user's own polls. The layout follows
+ # admin/show.html.twig so both pages read the same, minus the author column,
+ # which would repeat the reader's own address on every row.
+ #
+ # The header block is deliberately not overridden: this page keeps the
+ # branded header the rest of the site uses.
+ #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'my_polls.title' | trans({}, 'digitalsme') }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper--center flow flow--larger">
+        <h1>
+            {{ 'my_polls.title' | trans({}, 'digitalsme') }}
+        </h1>
+
+        <div class="flow flow--large">
+            <p class="text--secondary">
+                {{ 'my_polls.matched_on' | trans({ email: userEmail }, 'digitalsme') }}
+            </p>
+
+            {% if pollsPagination.count > 0 %}
+                <div class="flow">
+                    {{ include('_pagination.html.twig', { pagination: pollsPagination }) }}
+
+                    <ul class="list--nostyle flow">
+                        {% for poll in pollsPagination.items %}
+                            <li class="panel panel--primary panel--rounded flow flow--small">
+                                <h2>{{ poll.title }}</h2>
+
+                                <ul class="list--nostyle flow flow--small">
+                                    <li class="cols cols--gap-smaller">
+                                        <span class="col--size2">
+                                            {{ 'admin.polls.created_at' | trans }}
+                                        </span>
+
+                                        <strong>
+                                            <time datetime="{{ poll.createdAt | dateIso }}" data-controller="relative-time">
+                                                {{ poll.createdAt | dateTrans }}
+                                            </time>
+                                        </strong>
+                                    </li>
+
+                                    <li class="cols cols--gap-smaller">
+                                        <span class="col--size2">
+                                            {{ 'admin.polls.public_link' | trans }}
+                                        </span>
+
+                                        {% if poll.isCompleted %}
+                                            <a href="{{ url('poll', { slug: poll.slug }) }}">
+                                                {{ url('poll', { slug: poll.slug }) }}
+                                            </a>
+                                        {% else %}
+                                            <em>
+                                                {{ 'admin.polls.not_completed' | trans }}
+                                            </em>
+                                        {% endif %}
+                                    </li>
+
+                                    <li class="cols cols--gap-smaller">
+                                        <span class="col--size2">
+                                            {{ 'admin.polls.admin_link' | trans }}
+                                        </span>
+
+                                        <a href="{{ url('poll admin', { id: poll.id, token: poll.adminToken }) }}">
+                                            {{ url('poll admin', { id: poll.id, token: poll.adminToken }) }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    {{ include('_pagination.html.twig', { pagination: pollsPagination }) }}
+                </div>
+            {% else %}
+                <p class="panel panel--grey panel--rounded">
+                    {{ 'my_polls.none' | trans({}, 'digitalsme') }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

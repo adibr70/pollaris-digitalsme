@@ -63,9 +63,18 @@
                 </a>
             {% endif %}
 
-            <a class="button" href="{{ path('my') }}">
-                {{ 'home.my_polls_and_votes' | trans }}
-            </a>
+            {# Signed in, the second button leads to the list of your own
+             # polls. Signed out, it keeps upstream's page, which mails the
+             # list to whoever proves an address. #}
+            {% if is_granted('ROLE_USER') %}
+                <a class="button" href="{{ path('my polls') }}">
+                    {{ 'my_polls.title' | trans({}, 'digitalsme') }}
+                </a>
+            {% else %}
+                <a class="button" href="{{ path('my') }}">
+                    {{ 'home.my_polls_and_votes' | trans }}
+                </a>
+            {% endif %}
         </p>
 
         {% if not is_granted('ROLE_USER') %}
