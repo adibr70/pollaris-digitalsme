@@ -1,0 +1,126 @@
+{#
+ # Local addition for polls.digitalsme.eu, not part of upstream Pollaris.
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #
+ # Account management for administrators. The layout follows
+ # admin/show.html.twig so the two administration pages read alike.
+ #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'users.title' | trans({}, 'digitalsme') }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper--center flow flow--larger">
+        <h1>{{ 'users.title' | trans({}, 'digitalsme') }}</h1>
+
+        {% for message in app.flashes('success') %}
+            {{ include('notifications/_success.html.twig', { message: message | trans({}, 'digitalsme') }) }}
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <p class="panel panel--grey panel--rounded">
+                <strong>{{ message | trans({}, 'digitalsme') }}</strong>
+            </p>
+        {% endfor %}
+
+        <div class="flow flow--large">
+            <p class="text--secondary">
+                {{ 'users.intro' | trans({}, 'digitalsme') }}
+            </p>
+
+            <p>
+                <button
+                    type="button"
+                    class="button button--primary"
+                    data-controller="modal-opener"
+                    data-action="modal-opener#fetch"
+                    data-modal-opener-selector-value="{{ path('new user') }}"
+                >
+                    {{ icon('circle-plus') }}
+                    {{ 'users.add' | trans({}, 'digitalsme') }}
+                </button>
+            </p>
+
+            <ul class="list--nostyle flow">
+                {% for user in users %}
+                    {% set isAdministrator = 'ROLE_ADMIN' in user.roles %}
+                    {% set isSelf = user.userIdentifier == currentUsername %}
+                    {% set isLastAdministrator = isAdministrator and administratorsCount <= 1 %}
+
+                    <li class="panel panel--primary panel--rounded flow flow--small">
+                        <h2>
+                            {{ user.userIdentifier }}
+                            {% if isSelf %}
+                                <span class="text--secondary">({{ 'users.you' | trans({}, 'digitalsme') }})</span>
+                            {% endif %}
+                        </h2>
+
+                        <ul class="list--nostyle flow flow--small">
+                            <li class="cols cols--gap-smaller">
+                                <span class="col--size2">{{ 'users.role' | trans({}, 'digitalsme') }}</span>
+                                <strong>
+                                    {% if isAdministrator %}
+                                        {{ 'users.role.administrator' | trans({}, 'digitalsme') }}
+                                    {% else %}
+                                        {{ 'users.role.colleague' | trans({}, 'digitalsme') }}
+                                    {% endif %}
+                                </strong>
+                            </li>
+
+                            <li class="cols cols--gap-smaller">
+                                <span class="col--size2">{{ 'users.polls' | trans({}, 'digitalsme') }}</span>
+                                <strong>
+                                    {{ 'users.polls_count' | trans({ count: pollCounts[user.userIdentifier|lower] | default(0) }, 'digitalsme') }}
+                                </strong>
+                            </li>
+
+                            <li class="cols cols--gap-smaller">
+                                <span class="col--size2">{{ 'users.created_at' | trans({}, 'digitalsme') }}</span>
+                                <strong>
+                                    <time datetime="{{ user.createdAt | dateIso }}">{{ user.createdAt | dateTrans }}</time>
+                                </strong>
+                            </li>
+                        </ul>
+
+                        {# A div, not a p: a <form> is not allowed inside a
+                         # paragraph, and the parser would close the <p> on
+                         # sight, leaving the flex container empty and the
+                         # buttons stacked. #}
+                        <div class="cols cols--hend cols--gap-smaller">
+                            {# The last administrator keeps the role: removing it
+                             # would lock everyone out of this very page. #}
+                            {% if not isLastAdministrator %}
+                                <form action="{{ path('change user role', { id: user.id }) }}" method="post" data-turbo="false">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('change-user-role') }}">
+                                    <input type="hidden" name="role" value="{{ isAdministrator ? 'user' : 'admin' }}">
+
+                                    <button class="button button--small" type="submit">
+                                        {% if isAdministrator %}
+                                            {{ 'users.make_colleague' | trans({}, 'digitalsme') }}
+                                        {% else %}
+                                            {{ 'users.make_administrator' | trans({}, 'digitalsme') }}
+                                        {% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {% if not isSelf and not isLastAdministrator %}
+                                <button
+                                    type="button"
+                                    class="button button--danger button--small"
+                                    data-controller="modal-opener"
+                                    data-action="modal-opener#fetch"
+                                    data-modal-opener-selector-value="{{ path('delete user', { id: user.id }) }}"
+                                >
+                                    {{ icon('trash') }}
+                                    {{ 'users.delete' | trans({}, 'digitalsme') }}
+                                </button>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

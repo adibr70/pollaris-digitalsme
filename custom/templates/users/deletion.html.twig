@@ -1,0 +1,31 @@
+{#
+ # Local addition for polls.digitalsme.eu, not part of upstream Pollaris.
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #
+ # The confirmation states how many polls go with the account, because that
+ # is the part nobody expects.
+ #}
+
+{% extends 'modal.html.twig' %}
+
+{% block title %}{{ 'users.deletion.title' | trans({}, 'digitalsme') }}{% endblock %}
+
+{% block body %}
+    {% if isSelf %}
+        <p>{{ 'users.cannot_delete_self' | trans({}, 'digitalsme') }}</p>
+    {% elseif isLastAdministrator %}
+        <p>{{ 'users.last_administrator' | trans({}, 'digitalsme') }}</p>
+    {% else %}
+        <form action="{{ path('delete user', { id: user.id }) }}" method="post" data-turbo="false" class="flow">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete-user') }}">
+
+            <p>
+                {{ 'users.deletion.information' | trans({ username: user.userIdentifier | escape, count: pollsCount }, 'digitalsme') | raw }}
+            </p>
+
+            <button class="button button--danger" type="submit">
+                {{ 'users.deletion.submit' | trans({}, 'digitalsme') }}
+            </button>
+        </form>
+    {% endif %}
+{% endblock %}

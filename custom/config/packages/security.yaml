@@ -37,6 +37,10 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
 
+        # Account management, a local addition. Administrators only: it can
+        # create accounts, change roles and delete accounts with their polls.
+        - { path: ^/users, roles: ROLE_ADMIN }
+
         # LOCAL CHANGE (DIGITAL SME)
         #
         # By default anyone can create a poll: Pollaris is designed as a public

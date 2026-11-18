@@ -1,0 +1,18 @@
+{#
+ # Local addition for polls.digitalsme.eu, not part of upstream Pollaris.
+ # SPDX-License-Identifier: AGPL-3.0-or-later
+ #}
+
+{% extends 'modal.html.twig' %}
+
+{% block title %}{{ 'users.add' | trans({}, 'digitalsme') }}{% endblock %}
+
+{% block body %}
+    {{ form_start(form, { action: path('new user') }) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.username) }}
+        {{ form_row(form.password) }}
+        {{ form_row(form.administrator) }}
+        {{ form_row(form.submit) }}
+    {{ form_end(form) }}
+{% endblock %}
