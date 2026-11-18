@@ -18,3 +18,6 @@ home.staff_only: 'Creating polls is reserved for the European DIGITAL SME Allian
 my_polls.title: 'My polls'
 my_polls.matched_on: 'Polls you created with the address {email}.'
 my_polls.none: 'You have not created any poll yet.'
+
+# Header link to the administration back-office, for administrators only.
+all_polls.title: 'All polls'

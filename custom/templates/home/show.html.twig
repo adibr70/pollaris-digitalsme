@@ -52,27 +52,21 @@
         {# Creating polls is reserved for staff (see
          # config/packages/security.yaml). Without this, visitors would press
          # the button and land on a login screen with no explanation. #}
+        {# Signed out, logging in is the only thing to offer: creating polls
+         # is reserved for staff, and upstream's "My polls and votes" page
+         # mails poll links to any address typed into it. #}
         <p class="cols cols--center cols--gap">
             {% if is_granted('ROLE_USER') %}
                 <a class="button button--primary" href="{{ path('choose poll type') }}">
                     {{ 'home.create_poll' | trans }}
                 </a>
-            {% else %}
-                <a class="button button--primary" href="{{ path('login') }}">
-                    {{ 'login.log_in' | trans }}
-                </a>
-            {% endif %}
 
-            {# Signed in, the second button leads to the list of your own
-             # polls. Signed out, it keeps upstream's page, which mails the
-             # list to whoever proves an address. #}
-            {% if is_granted('ROLE_USER') %}
                 <a class="button" href="{{ path('my polls') }}">
                     {{ 'my_polls.title' | trans({}, 'digitalsme') }}
                 </a>
             {% else %}
-                <a class="button" href="{{ path('my') }}">
-                    {{ 'home.my_polls_and_votes' | trans }}
+                <a class="button button--primary" href="{{ path('login') }}">
+                    {{ 'login.log_in' | trans }}
                 </a>
             {% endif %}
         </p>

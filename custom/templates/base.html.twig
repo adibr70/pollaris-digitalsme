@@ -4,11 +4,18 @@
  # Copyright 2024-2026 Marien Fressinaud
  # SPDX-License-Identifier: AGPL-3.0-or-later
  #
- # Change: for signed-in users the header link points at "My polls", the page
- # listing the polls they created. Upstream's /my is a form that mails that
- # list instead, which is what signed-out visitors still get.
+ # Change: the header navigation follows who is signed in.
  #
- # This is the only change; the rest is upstream's file verbatim.
+ # Signed out: a single "Log in" link. Upstream's "My polls and votes" led to
+ # a form that mails poll links to any address typed into it, which no longer
+ # fits an instance where only staff create polls.
+ #
+ # Signed in: create a poll, your own polls, and, for administrators, every
+ # poll on the instance.
+ #
+ # Change: a logout button. Upstream only offers one in the administration
+ # layout, so a colleague without administrator rights had no way to sign out
+ # at all, which matters on a shared computer.
  #}
 
 <!DOCTYPE html>
@@ -57,17 +64,27 @@
                         </a>
 
                         {% if is_granted('ROLE_USER') %}
+                            <a class="header__link" href="{{ path('choose poll type') }}">
+                                {{ 'home.create_poll' | trans }}
+                            </a>
+
                             <a class="header__link" href="{{ path('my polls') }}">
                                 {{ 'my_polls.title' | trans({}, 'digitalsme') }}
                             </a>
+
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="header__link" href="{{ path('admin') }}">
+                                    {{ 'all_polls.title' | trans({}, 'digitalsme') }}
+                                </a>
+                            {% endif %}
                         {% else %}
-                            <a class="header__link" href="{{ path('my') }}">
-                                {{ 'layout.header.my' | trans }}
+                            <a class="header__link" href="{{ path('login') }}">
+                                {{ 'login.log_in' | trans }}
                             </a>
                         {% endif %}
                     </div>
 
-                    <div>
+                    <div class="cols cols--gap-small">
                         <button
                             class="header__button button--small"
                             data-controller="modal-opener"
@@ -77,6 +94,16 @@
                             {{ icon('gear') }}
                             {{ 'layout.header.preferences' | trans }}
                         </button>
+
+                        {% if is_granted('ROLE_USER') %}
+                            <form action="{{ path('logout') }}" method="post" data-turbo="false">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+
+                                <button class="header__button button--small" type="submit">
+                                    {{ 'layout.logout' | trans }}
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
                 </header>
             {% endblock %}

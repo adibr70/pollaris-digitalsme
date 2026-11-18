@@ -73,6 +73,23 @@
                                         </a>
                                     </li>
                                 </ul>
+
+                                {# Reuses upstream's confirmation modal and its
+                                 # translations: the same dialog the poll's own
+                                 # summary page opens, so there is one deletion
+                                 # flow in the application, not two. #}
+                                <p class="cols cols--hend">
+                                    <button
+                                        type="button"
+                                        class="button button--danger button--small"
+                                        data-controller="modal-opener"
+                                        data-action="modal-opener#fetch"
+                                        data-modal-opener-selector-value="{{ path('delete poll', { id: poll.id, token: poll.adminToken }) }}"
+                                    >
+                                        {{ icon('trash') }}
+                                        {{ 'polls.summary.delete_poll' | trans }}
+                                    </button>
+                                </p>
                             </li>
                         {% endfor %}
                     </ul>
