@@ -8,7 +8,7 @@
 {% block title %}{{ 'users.add' | trans({}, 'digitalsme') }}{% endblock %}
 
 {% block body %}
-    {{ form_start(form, { action: path('new user') }) }}
+    {{ form_start(form, { action: path('new user'), attr: { class: 'flow flow--large' } }) }}
         {{ form_errors(form) }}
         {{ form_row(form.username) }}
         {{ form_row(form.password) }}

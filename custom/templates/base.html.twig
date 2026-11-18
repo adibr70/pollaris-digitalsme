@@ -99,7 +99,10 @@
                         </button>
 
                         {% if is_granted('ROLE_USER') %}
-                            <a class="header__link" href="{{ path('my password') }}">
+                            {# "button" as well as "header__button": the CSS
+                             # styles native <button> elements or anything
+                             # carrying the .button class, and this is an <a>. #}
+                            <a class="button header__button button--small" href="{{ path('my password') }}">
                                 {{ 'password.menu' | trans({}, 'digitalsme') }}
                             </a>
 
