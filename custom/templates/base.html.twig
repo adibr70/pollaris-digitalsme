@@ -6,9 +6,12 @@
  #
  # Change: the header navigation follows who is signed in.
  #
- # Signed out: a single "Log in" link. Upstream's "My polls and votes" led to
- # a form that mails poll links to any address typed into it, which no longer
- # fits an instance where only staff create polls.
+ # Signed out: no navigation at all. Upstream's "My polls and votes" led to a
+ # form that mails poll links to any address typed into it, which no longer
+ # fits an instance where only staff create polls. Nor is a "Log in" link
+ # offered here: most signed-out visitors are participants who arrived on a
+ # voting page to vote, and have no account to sign in with. Staff sign in
+ # from the home page, which keeps its button.
  #
  # Signed in: create a poll, your own polls, and, for administrators, every
  # poll on the instance.
@@ -77,10 +80,6 @@
                                     {{ 'all_polls.title' | trans({}, 'digitalsme') }}
                                 </a>
                             {% endif %}
-                        {% else %}
-                            <a class="header__link" href="{{ path('login') }}">
-                                {{ 'login.log_in' | trans }}
-                            </a>
                         {% endif %}
                     </div>
 
