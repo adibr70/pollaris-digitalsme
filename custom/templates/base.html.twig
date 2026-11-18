@@ -99,6 +99,10 @@
                         </button>
 
                         {% if is_granted('ROLE_USER') %}
+                            <a class="header__link" href="{{ path('my password') }}">
+                                {{ 'password.menu' | trans({}, 'digitalsme') }}
+                            </a>
+
                             <form action="{{ path('logout') }}" method="post" data-turbo="false">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
 

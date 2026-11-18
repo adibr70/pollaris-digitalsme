@@ -67,6 +67,9 @@ security:
         # Anchored like the rest; /my itself stays public.
         - { path: '^/my/polls/?$', roles: ROLE_USER }
 
+        # Changing your own password, a local addition.
+        - { path: '^/my/password/?$', roles: ROLE_USER }
+
         # Deletion of a vote by the poll's administrator.
         - { path: '^/polls/[^/]+/[^/]+/votes/[^/]+/deletion/?$', roles: ROLE_USER }
 

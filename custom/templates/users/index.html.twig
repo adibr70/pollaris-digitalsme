@@ -105,6 +105,16 @@
                                 </form>
                             {% endif %}
 
+                            <button
+                                type="button"
+                                class="button button--small"
+                                data-controller="modal-opener"
+                                data-action="modal-opener#fetch"
+                                data-modal-opener-selector-value="{{ path('change user password', { id: user.id }) }}"
+                            >
+                                {{ 'password.menu' | trans({}, 'digitalsme') }}
+                            </button>
+
                             {% if not isSelf and not isLastAdministrator %}
                                 <button
                                     type="button"

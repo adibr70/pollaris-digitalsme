@@ -114,6 +114,32 @@ class UsersController extends BaseController
         return $this->redirectToRoute('users');
     }
 
+    #[Route('/users/{id}/password', name: 'change user password')]
+    public function changePassword(Entity\User $user, Request $request): Response
+    {
+        // No current password asked for: an administrator resets a password
+        // precisely when nobody knows it any more.
+        $form = $this->createNamedForm('password', Form\SetPasswordForm::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $this->passwordHasher->hashPassword($user, $form->get('password')->getData())
+            );
+            $this->userRepository->save($user);
+
+            $this->addFlash('success', 'password.changed_for_user');
+
+            return $this->redirectToRoute('users');
+        }
+
+        return $this->render('users/password.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/users/{id}/deletion', name: 'delete user')]
     public function deletion(Entity\User $user, Request $request): Response
     {
